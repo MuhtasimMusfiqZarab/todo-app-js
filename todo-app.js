@@ -21,19 +21,9 @@ const todos = [
   }
 ];
 
-//printing unfinished todos
-const incompleteTodos = todos.filter(todo => {
-  return !todo.completed;
-});
+//user interaction with button
 
-const summary = document.createElement("h2");
-summary.textContent = ` you have ${incompleteTodos.length} todos left`;
-document.querySelector("body").appendChild(summary);
-
-//show all the todos
-
-todos.forEach(todo => {
-  const todosText = document.createElement("p");
-  todosText.textContent = todo.text;
-  document.querySelector("body").appendChild(todosText);
+document.querySelector("button").addEventListener("click", e => {
+  console.log("Button clicked");
+  e.target.textContent = "clicked";
 });
