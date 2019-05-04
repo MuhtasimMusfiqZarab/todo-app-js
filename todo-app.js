@@ -23,7 +23,7 @@ const todos = [
 
 //user interaction with button
 
-document.querySelector("button").addEventListener("click", e => {
+document.querySelector("#add-todo").addEventListener("click", e => {
   console.log("Button clicked");
   e.target.textContent = "clicked";
 });
