@@ -1,25 +1,11 @@
-const todos = [
-  {
-    text: "Order cat food",
-    completed: false
-  },
-  {
-    text: "Clean kitchen",
-    completed: true
-  },
-  {
-    text: "Buy food",
-    completed: true
-  },
-  {
-    text: "Do work",
-    completed: false
-  },
-  {
-    text: "Exercise",
-    completed: true
-  }
-];
+let todos = [];
+
+//search for local storage existing data
+const todosJSON = localStorage.getItem("todos");
+
+if (todosJSON !== null) {
+  todos = JSON.parse(todosJSON);
+}
 
 //filtering according to the inputs
 const filters = {
@@ -67,7 +53,7 @@ const renderTodos = (todos, filters) => {
 //initial rendering
 renderTodos(todos, filters);
 
-//Input form event listener
+//create new todo==========Input form event listener
 document.querySelector("#new-todo").addEventListener("submit", e => {
   //preventing default form behaviour
   e.preventDefault();
@@ -76,9 +62,12 @@ document.querySelector("#new-todo").addEventListener("submit", e => {
     text: e.target.elements.newTodo.value,
     completed: false
   });
+
+  //saving to local storage
+  localStorage.setItem("todos", JSON.stringify(todos));
   //rerender after adding new one
   renderTodos(todos, filters);
-  //wipping up the form after submission
+  //wipping up the input form after submission
   e.target.elements.newTodo.value = "";
 });
 
