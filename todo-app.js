@@ -23,16 +23,27 @@ const todos = [
 
 //filtering according to the inputs
 const filters = {
-  searchText: ""
+  searchText: "",
+  hideCompleted: false
 };
 
-//render todos function
+//renderTodos function
 const renderTodos = (todos, filters) => {
-  const filteredTodos = todos.filter(todo => {
+  let filteredTodos = todos.filter(todo => {
+    //show all the todos
     return todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
   });
 
-  //finding incomplete ones & render it
+  //filtering again for checkbox
+  filteredTodos = filteredTodos.filter(todo => {
+    if (filters.hideCompleted) {
+      return !todo.completed;
+    } else {
+      return true;
+    }
+  });
+
+  //finding incomplete ones to find out the total number
   const incompleteTodos = filteredTodos.filter(todo => {
     return !todo.completed;
   });
@@ -40,7 +51,7 @@ const renderTodos = (todos, filters) => {
   //clearing previous rendered todos
   document.querySelector("#todos").innerHTML = "";
 
-  //rendering the summary to the DOM
+  //rendering the incompleted summary to the DOM(h2 tag)
   const summary = document.createElement("h2");
   summary.textContent = `You have ${incompleteTodos.length} todos left`;
   document.querySelector("#todos").appendChild(summary);
@@ -75,5 +86,12 @@ document.querySelector("#new-todo").addEventListener("submit", e => {
 document.querySelector("#search-text").addEventListener("input", e => {
   filters.searchText = e.target.value;
   //re-renders after filtering the data
+  renderTodos(todos, filters);
+});
+
+//checkbox event listener
+document.querySelector("#checkbox").addEventListener("change", e => {
+  // console.log(e.target.checked);
+  filters.hideCompleted = e.target.checked;
   renderTodos(todos, filters);
 });
