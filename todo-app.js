@@ -56,15 +56,19 @@ const renderTodos = (todos, filters) => {
 //initial rendering
 renderTodos(todos, filters);
 
-//user interaction with button
-document.querySelector("#add-todo").addEventListener("click", e => {
-  console.log("Button clicked");
-  e.target.textContent = "clicked";
-});
-
-//create new todo input field
-document.querySelector("#new-todo").addEventListener("input", e => {
-  console.log(e.target.value);
+//Input form event listener
+document.querySelector("#new-todo").addEventListener("submit", e => {
+  //preventing default form behaviour
+  e.preventDefault();
+  //pushing the new data to the todo array
+  todos.push({
+    text: e.target.elements.newTodo.value,
+    completed: false
+  });
+  //rerender after adding new one
+  renderTodos(todos, filters);
+  //wipping up the form after submission
+  e.target.elements.newTodo.value = "";
 });
 
 //Seach todo event listener
