@@ -15,6 +15,7 @@ document.querySelector("#new-todo").addEventListener("submit", e => {
   e.preventDefault();
   //pushing the new data to the todo array
   todos.push({
+    id: uuidv4(),
     text: e.target.elements.newTodo.value,
     completed: false
   });
