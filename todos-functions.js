@@ -49,6 +49,16 @@ const renderTodos = (todos, filters) => {
   });
 };
 
+//removing a todo
+const removeTodo = id => {
+  const todoIndex = todos.findIndex(todo => {
+    return todo.id === id;
+  });
+  if (todoIndex > -1) {
+    todos.splice(todoIndex, 1); //removing
+  }
+};
+
 //get DOM elements for every individual note
 const generateTodoDOM = todo => {
   //this is the container element for p and button
@@ -62,6 +72,13 @@ const generateTodoDOM = todo => {
   //remove note button
   const button = document.createElement("button");
   button.textContent = "x";
+
+  //remove note event handler
+  button.addEventListener("click", e => {
+    removeTodo(todo.id);
+    saveTodos(todos);
+    renderTodos(todos, filters); //re-rendering
+  });
 
   //appending one after another
   todoElement.appendChild(checkbox);
