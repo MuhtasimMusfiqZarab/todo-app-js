@@ -49,7 +49,7 @@ const renderTodos = (todos, filters) => {
   });
 };
 
-//removing a todo
+//removing a todo by id
 const removeTodo = id => {
   const todoIndex = todos.findIndex(todo => {
     return todo.id === id;
@@ -59,16 +59,38 @@ const removeTodo = id => {
   }
 };
 
+//Toggle the completed value for a given todo
+const toggleTodo = id => {
+  const todo = todos.find(todo => {
+    return (todo.id = id);
+  });
+  if (todo !== undefined) {
+    // if found
+    todo.completed = !todo.completed;
+  }
+};
+
 //get DOM elements for every individual note
 const generateTodoDOM = todo => {
   //this is the container element for p and button
   const todoElement = document.createElement("div");
   const textElement = document.createElement("span");
-  textElement.textContent = todo.text;
+
   //setting input elements default type attribute from text to checkbox
   const checkbox = document.createElement("input");
+
   //configure checkbox
   checkbox.setAttribute("type", "checkbox");
+  checkbox.checked = todo.completed;
+  todoElement.appendChild(checkbox);
+
+  checkbox.addEventListener("change", () => {
+    toggleTodo(todo.id);
+    saveTodos(todos);
+    renderTodos(todos, filters);
+  });
+
+  textElement.textContent = todo.text;
   //remove note button
   const button = document.createElement("button");
   button.textContent = "x";
@@ -81,7 +103,7 @@ const generateTodoDOM = todo => {
   });
 
   //appending one after another
-  todoElement.appendChild(checkbox);
+
   todoElement.appendChild(textElement);
   todoElement.appendChild(button);
 
