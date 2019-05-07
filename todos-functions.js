@@ -1,10 +1,11 @@
-//get local storage data
+"use strict";
+
+//get local storage data===========================
 const getSavedTodos = () => {
   const todosJSON = localStorage.getItem("todos");
-
-  if (todosJSON !== null) {
-    return JSON.parse(todosJSON);
-  } else {
+  try {
+    return todosJSON ? JSON.parse(todosJSON) : [];
+  } catch (error) {
     return [];
   }
 };
@@ -15,7 +16,7 @@ const saveTodos = todos => {
   localStorage.setItem("todos", JSON.stringify(todos));
 };
 
-//renderTodos function==============================
+//renderTodos function=================================
 const renderTodos = (todos, filters) => {
   let filteredTodos = todos.filter(todo => {
     //show all the todos
@@ -49,7 +50,7 @@ const renderTodos = (todos, filters) => {
   });
 };
 
-//removing a todo by id
+//removing a todo by id===================
 const removeTodo = id => {
   const todoIndex = todos.findIndex(todo => {
     return todo.id === id;
@@ -59,18 +60,18 @@ const removeTodo = id => {
   }
 };
 
-//Toggle the completed value for a given todo
+//Toggle the completed value for a given todo===============
 const toggleTodo = id => {
   const todo = todos.find(todo => {
     return (todo.id = id);
   });
-  if (todo !== undefined) {
+  if (todo) {
     // if found
     todo.completed = !todo.completed;
   }
 };
 
-//get DOM elements for every individual note
+//get DOM elements for every individual note==========================
 const generateTodoDOM = todo => {
   //this is the container element for p and button
   const todoElement = document.createElement("div");
@@ -110,7 +111,7 @@ const generateTodoDOM = todo => {
   return todoElement;
 };
 
-//Get the DOM elements for list summary
+//Get the DOM elements for list summary===================
 const generateSummaryDOM = incompleteTodos => {
   const summary = document.createElement("h2");
   summary.textContent = `You have ${incompleteTodos.length} todos left`;

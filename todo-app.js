@@ -1,3 +1,5 @@
+"use strict";
+
 let todos = getSavedTodos();
 
 //filtering according to the inputs
