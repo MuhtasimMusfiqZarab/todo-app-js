@@ -18,6 +18,7 @@ const saveTodos = todos => {
 
 //renderTodos function=================================
 const renderTodos = (todos, filters) => {
+  const todosEl = document.querySelector("#todos");
   let filteredTodos = todos.filter(todo => {
     //show all the todos
     return todo.text.toLowerCase().includes(filters.searchText.toLowerCase());
@@ -38,16 +39,21 @@ const renderTodos = (todos, filters) => {
   });
 
   //clearing previous rendered todos
-  document.querySelector("#todos").innerHTML = "";
+  todosEl.innerHTML = "";
   //rendering the incompleted summary to the DOM(h2 tag)
-  document
-    .querySelector("#todos")
-    .appendChild(generateSummaryDOM(incompleteTodos));
+  todosEl.appendChild(generateSummaryDOM(incompleteTodos));
 
-  //rendering the filtered elements accrding to the input search
-  filteredTodos.forEach(todo => {
-    document.querySelector("#todos").appendChild(generateTodoDOM(todo));
-  });
+  if (filteredTodos.length > 0) {
+    //rendering the filtered elements accrding to the input search
+    filteredTodos.forEach(todo => {
+      todosEl.appendChild(generateTodoDOM(todo));
+    });
+  } else {
+    const messageEl = document.createElement("p");
+    messageEl.classList.add("empty-message");
+    messageEl.textContent = "No to-do to show";
+    todosEl.appendChild(messageEl);
+  }
 };
 
 //removing a todo by id===================
@@ -74,16 +80,18 @@ const toggleTodo = id => {
 //get DOM elements for every individual note==========================
 const generateTodoDOM = todo => {
   //this is the container element for p and button
-  const todoElement = document.createElement("div");
+  const todoElement = document.createElement("label");
+  const containerElement = document.createElement("div");
   const textElement = document.createElement("span");
-
   //setting input elements default type attribute from text to checkbox
   const checkbox = document.createElement("input");
+  //remove note button
+  const button = document.createElement("button");
 
   //configure checkbox
   checkbox.setAttribute("type", "checkbox");
   checkbox.checked = todo.completed;
-  todoElement.appendChild(checkbox);
+  containerElement.appendChild(checkbox);
 
   checkbox.addEventListener("change", () => {
     toggleTodo(todo.id);
@@ -91,11 +99,18 @@ const generateTodoDOM = todo => {
     renderTodos(todos, filters);
   });
 
+  //setup to do text
   textElement.textContent = todo.text;
-  //remove note button
-  const button = document.createElement("button");
-  button.textContent = "x";
+  containerElement.appendChild(textElement);
 
+  //classes for container
+  todoElement.classList.add("list-item");
+  containerElement.classList.add("list-item__container");
+  todoElement.appendChild(containerElement);
+
+  button.textContent = "remove";
+  button.classList.add("button", "button--text");
+  todoElement.appendChild(button);
   //remove note event handler
   button.addEventListener("click", e => {
     removeTodo(todo.id);
@@ -103,17 +118,14 @@ const generateTodoDOM = todo => {
     renderTodos(todos, filters); //re-rendering
   });
 
-  //appending one after another
-
-  todoElement.appendChild(textElement);
-  todoElement.appendChild(button);
-
   return todoElement;
 };
 
 //Get the DOM elements for list summary===================
 const generateSummaryDOM = incompleteTodos => {
   const summary = document.createElement("h2");
-  summary.textContent = `You have ${incompleteTodos.length} todos left`;
+  const plural = incompleteTodos.length <= 1 ? "" : "s";
+  summary.classList.add("list-title");
+  summary.textContent = `You have ${incompleteTodos.length} todo${plural} left`;
   return summary;
 };

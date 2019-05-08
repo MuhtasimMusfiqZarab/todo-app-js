@@ -13,20 +13,24 @@ renderTodos(todos, filters);
 
 //create new todo==========Input form event listener
 document.querySelector("#new-todo").addEventListener("submit", e => {
+  //cheching todo length
+  const text = e.target.elements.newTodo.value.trim();
   //preventing default form behaviour
   e.preventDefault();
-  //pushing the new data to the todo array
-  todos.push({
-    id: uuidv4(),
-    text: e.target.elements.newTodo.value,
-    completed: false
-  });
-  //save to local storage
-  saveTodos(todos);
-  //rerender after adding new one
-  renderTodos(todos, filters);
-  //wipping up the input form after submission
-  e.target.elements.newTodo.value = "";
+  if (text.length > 0) {
+    //pushing the new data to the todo array
+    todos.push({
+      id: uuidv4(),
+      text,
+      completed: false
+    });
+    //save to local storage
+    saveTodos(todos);
+    //rerender after adding new one
+    renderTodos(todos, filters);
+    //wipping up the input form after submission
+    e.target.elements.newTodo.value = "";
+  }
 });
 
 //Seach todo event listener
